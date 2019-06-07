@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import PictureCard from "./components/PictureCard"
+import Nav from "./components/Nav"
+import Wrapper from "./components/Wrapper"
+import Title from "./components/Title"
+import pictures from "./pictures.json"
 import logo from './logo.svg';
 import './App.css';
 
@@ -17,6 +22,39 @@ class App extends Component {
     topScore: 0,
     clickedPic: [],
     message: "Click an image to begin"
+  }
+  render() {
+    return (
+      <Wrapper>
+        <Nav
+          title = "Clicky Game"
+          score = {this.state.score}
+          topScore = {this.state.topScore}
+          message = {this.state.message}
+        />
+  
+        <Title>
+          Click on an image to earn points, but do not click on any more than once!
+        </Title>
+        <Container>
+          <Row>
+            {this.state.pictures.map(friend => (
+              <Column size = "md-3 sm-6">
+                <PictureCard
+                  key = {picture.id}
+                  handleClick = {this.handleClick}
+                  handleIncrement = {this.handleIncrement}
+                  handleReset = {this.handleReset}
+                  handleRandom = {this.handleRandom}
+                  id = {picture.id}
+                  image = {picture.image}
+                />
+              </Column>
+            ))}
+          </Row>
+        </Container>
+      </Wrapper>
+    )
   }
 }
 
@@ -49,7 +87,7 @@ handleReset = () => {
     score: 0,
     topScore: this.state.topScore,
     message: "You guessed wrong, try again!",
-    clickedPic = []
+    clickedPic : []
   });
   this.randomPicture();
 }
@@ -102,39 +140,6 @@ handleRandom = () => {
 //   );
 // }
 
-render() {
-  return (
-    <Wrapper>
-      <Nav
-        title = "Clicky Game"
-        score = {this.state.score}
-        topScore = {this.state.topScore}
-        message = {this.state.message}
-      />
-
-      <Title>
-        Click on an image to earn points, but do not click on any more than once!
-      </Title>
-      <Container>
-        <Row>
-          {this.state.pictures.map(friend => (
-            <Column size = "md-3 sm-6">
-              <PictureCard
-                key = {picture.id}
-                handleClick = {this.handleClick}
-                handleIncrement = {this.handleIncrement}
-                handleReset = {this.handleReset}
-                handleRandom = {this.handleRandom}
-                id = {picture.id}
-                image = {picture.image}
-              />
-            </Column>
-          ))}
-        </Row>
-      </Container>
-    </Wrapper>
-  )
-}
 
 
 export default App;
