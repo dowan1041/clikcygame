@@ -2,9 +2,13 @@ import React, { Component } from "react";
 import logo from './logo.svg';
 import './App.css';
 
-// function randomPicture(elements) {
-
-// }
+function randomPicture(elements) {
+  for (let i = elements.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [elements[i], elements[j]] = [elements[j], elements[i]];
+  }
+  return elements;
+};
 
 class App extends Component {
   state = {
@@ -16,27 +20,50 @@ class App extends Component {
   }
 }
 
-clickedPictures = prop => {
-  if(this.state.clickedPic.includes(props.id) === false) {
-    this.state.clickedPic.push(prop.id);
-    this.setState({
-      score: this.state.score + 1,
-    });
-    if(this.state.score >= this.state.topScore) {
-      this.state((prevState) => ({
-        topScore: prevState.score,
-        message: "You guessed correctly, you got a point."
-      }));
-    }
-  }
-  else {
-    this.setState({
-      score: 0,
-      clickedPic: [],
-      message: "You guessed wrong, try again."
-    })
+handleClick = id => {
+  if (this.state.clickedPic.indexOf(id) === -1) {
+    this.handleIncrement();
+    this.setState({ clickedPic: this.state.clickedPic.concat(id) });
+  } else {
+    this.handleReset();
   }
 }
+
+handleIncrement = () => {
+
+}
+
+handleReset = () => {
+  this.setState({
+    score: 0,
+    topScore: this.state.topScore,
+    message: "You guessed wrong, try again!",
+    clickedPic = []
+  });
+  this.randomPicture();
+}
+
+// clickedPictures = prop => {
+//   if(this.state.clickedPic.includes(props.id) === false) {
+//     this.state.clickedPic.push(prop.id);
+//     this.setState({
+//       score: this.state.score + 1,
+//     });
+//     if(this.state.score >= this.state.topScore) {
+//       this.state((prevState) => ({
+//         topScore: prevState.score,
+//         message: "You guessed correctly, you got a point."
+//       }));
+//     }
+//   }
+//   else {
+//     this.setState({
+//       score: 0,
+//       clickedPic: [],
+//       message: "You guessed wrong, try again."
+//     })
+//   }
+// }
 
 function App() {
   return (
