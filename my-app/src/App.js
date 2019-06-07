@@ -4,8 +4,10 @@ import Nav from "./components/Nav"
 import Wrapper from "./components/Wrapper"
 import Title from "./components/Title"
 import pictures from "./pictures.json"
-import logo from './logo.svg';
 import './App.css';
+import Container from "./Container"
+import Row from "./Row"
+import Column from "./Column"
 
 function randomPicture(elements) {
   for (let i = elements.length - 1; i > 0; i--) {
@@ -23,6 +25,46 @@ class App extends Component {
     clickedPic: [],
     message: "Click an image to begin"
   }
+
+  handleClick = id => {
+    if (this.state.clickedPic.indexOf(id) === -1) {
+      this.handleIncrement();
+      this.setState({ clickedPic: this.state.clickedPic.concat(id) });
+    } else {
+      this.handleReset();
+    }
+  }
+  
+  handleIncrement = () => {
+    const newScore = this.state.score + 1;
+    this.setState({
+      score: newScore,
+      message: "You guessed correctly, you got a point."
+    });
+    if (newScore >= this.state.topScore) {
+      this.setState({
+        topScore: newScore,
+        message: "You guessed correctly, you got a high score."
+      })
+    }
+    this.handleRandom();
+  }
+  
+  handleReset = () => {
+    this.setState({
+      score: 0,
+      topScore: this.state.topScore,
+      message: "You guessed wrong, try again!",
+      clickedPic : []
+    });
+    this.handleRandom();
+  }
+  
+  handleRandom = () => {
+    let randomPic = randomPicture(pictures);
+    this.setState({ pictures: randomPic})
+  }
+  
   render() {
     return (
       <Wrapper>
@@ -38,7 +80,7 @@ class App extends Component {
         </Title>
         <Container>
           <Row>
-            {this.state.pictures.map(friend => (
+            {this.state.pictures.map(picture => (
               <Column size = "md-3 sm-6">
                 <PictureCard
                   key = {picture.id}
@@ -58,44 +100,7 @@ class App extends Component {
   }
 }
 
-handleClick = id => {
-  if (this.state.clickedPic.indexOf(id) === -1) {
-    this.handleIncrement();
-    this.setState({ clickedPic: this.state.clickedPic.concat(id) });
-  } else {
-    this.handleReset();
-  }
-}
 
-handleIncrement = () => {
-  const newScore = this.state.score + 1;
-  this.setState({
-    score: newScore,
-    message: "You guessed correctly, you got a point."
-  });
-  if (newScore >= this.state.topScore) {
-    this.setState({
-      topScore: newScore,
-      message: "You guessed correctly, you got a high score."
-    })
-  }
-  this.randomPicture();
-}
-
-handleReset = () => {
-  this.setState({
-    score: 0,
-    topScore: this.state.topScore,
-    message: "You guessed wrong, try again!",
-    clickedPic : []
-  });
-  this.randomPicture();
-}
-
-handleRandom = () => {
-  let randomPic = randomPicture(elements);
-  this.setState({ pictures: randomPic})
-}
 
 // clickedPictures = prop => {
 //   if(this.state.clickedPic.includes(props.id) === false) {
